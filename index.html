@@ -6,6 +6,7 @@
     <title>TG BOTS PASTE CODE</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.css">
     <style>
         body {
             background-color: rgba(255, 144, 163, 1);
@@ -41,16 +42,13 @@
 
 <footer class="bg-dark text-light text-center py-3 mt-4">
     <div class="footer-info" id="footer-info"></div>
-    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" rel="noopener">santhu</a></div>
+    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" 
+
+rel="noopener">santhu</a></div>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/javascript/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/htmlmixed/htmlmixed.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/css/css.min.js"></script>
+<!-- Cookie Consent -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -70,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var fileId = Math.random().toString(36).substring(7);
         var codeContent = editor.getValue();
         localStorage.setItem(fileId, codeContent);
-        var link = window.location.href + "?file=" + fileId;
+        var link = window.location.origin + window.location.pathname + "?file=" + fileId;
         document.getElementById("content").innerHTML = "Share this link: <a href='" + link + "' target='_blank'>" + link + "</a>";
         updateFooterInfo();
         saveButton.disabled = true; // Disable the save button after saving
@@ -111,6 +109,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add listener to prevent right-click context menu
     window.addEventListener("contextmenu", function (e) {
         e.preventDefault();
+    });
+
+    // Cookie Consent
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            "palette": {
+                "popup": { "background": "#f8f9fa" },
+                "button": { "background": "#007bff" }
+            },
+            "position": "bottom",
+            "content": {
+                "message": "This website uses cookies to ensure you get the best experience on our website.",
+                "dismiss": "Got it!",
+                "link": "Learn more"
+            }
+        });
     });
 });
 

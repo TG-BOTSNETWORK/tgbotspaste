@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>TG BOTS PASTE CODE</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+        <span style="color: #f8f9fa;">TG BOTS PASTE SPACE</span>
+    </a>
+</nav>
+
+<div class="container mt-4">
+    <div class="form-group">
+        <label for="code">Paste your code here:</label>
+        <textarea class="form-control" id="code" rows="10"></textarea>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-primary" id="save" disabled>Save</button>
+        <button class="btn btn-success" id="new">New</button>
+    </div>
+
+    <div id="content" class="mt-4"></div>
+</div>
+
+<footer class="bg-dark text-light text-center py-3 mt-4">
+    Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" rel="noopener">santhu</a>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/css/css.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        theme: "default",
+        readOnly: false,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+    });
+
+    var saveButton = document.getElementById("save");
+
+    document.getElementById("new").addEventListener("click", function () {
+        editor.setValue("");
+        document.getElementById("content").innerHTML = "";
+        saveButton.disabled = true;
+    });
+
+    editor.on("change", function () {
+        saveButton.disabled = editor.getValue().trim() === "";
+    });
+
+    saveButton.addEventListener("click", function () {
+        var fileId = Math.random().toString(36).substring(7);
+        var codeContent = editor.getValue();
+        localStorage.setItem(fileId, codeContent);
+        var link = window.location.href + fileId;
+        document.getElementById("content").innerHTML = "Share this link: <a href='" + link + "' target='_blank'>" + link + "</a>";
+        saveButton.disabled = true;
+    });
+});
+</script>
+</body>
+</html>

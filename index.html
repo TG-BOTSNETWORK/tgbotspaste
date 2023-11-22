@@ -42,13 +42,13 @@
 
 <footer class="bg-dark text-light text-center py-3 mt-4">
     <div class="footer-info" id="footer-info"></div>
-    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" 
-
-rel="noopener">santhu</a></div>
+    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" rel="noopener">santhu</a></div>
 </footer>
+
+<!-- Cookie Consent -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         theme: "default",
@@ -71,7 +71,6 @@ rel="noopener">santhu</a></div>
         updateFooterInfo();
         saveButton.disabled = true; // Disable the save button after saving
     });
-
 
     newButton.addEventListener("click", function () {
         editor.setValue("");
@@ -125,22 +124,22 @@ rel="noopener">santhu</a></div>
             }
         });
     });
+
+    function updateFooterInfo() {
+        var content = editor.getValue();
+        var wordCount = content.split(/\s+/).filter(function (word) {
+            return word.length > 0;
+        }).length;
+        var lineCount = editor.lineCount();
+        var length = content.length;
+
+        var lineWrap = editor.getOption("lineWrapping");
+        var wrapInfo = lineWrap ? "Wrapped" : "Not Wrapped";
+
+        var infoText = `Words: ${wordCount} | Lines: ${lineCount} | Length: ${length} | Line Wrap: ${wrapInfo}`;
+        footerInfo.textContent = infoText;
+    }
 });
-
-function updateFooterInfo() {
-    var content = editor.getValue();
-    var wordCount = content.split(/\s+/).filter(function (word) {
-        return word.length > 0;
-    }).length;
-    var lineCount = editor.lineCount();
-    var length = content.length;
-
-    var lineWrap = editor.getOption("lineWrapping");
-    var wrapInfo = lineWrap ? "Wrapped" : "Not Wrapped";
-
-    var infoText = `Words: ${wordCount} | Lines: ${lineCount} | Length: ${length} | Line Wrap: ${wrapInfo}`;
-    footerInfo.textContent = infoText;
-}
 </script>
 <script src="script.js"></script>
 </body>

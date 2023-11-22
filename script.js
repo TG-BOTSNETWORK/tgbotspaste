@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var fileId = Math.random().toString(36).substring(7);
         var codeContent = editor.getValue();
         localStorage.setItem(fileId, codeContent);
-        var link = "https://tg-botsnetwork.github.io/tgbotspaste//?file=" + fileId;
+        var link = "https://tg-botsnetwork.github.io/tgbotspaste/?file=" + fileId;
         document.getElementById("content").innerHTML = "Share this link: <a href='" + link + "' target='_blank'>" + link + "</a>";
         updateFooterInfo();
         saveButton.disabled = true; // Disable the save button after saving

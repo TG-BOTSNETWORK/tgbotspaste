@@ -15,14 +15,6 @@
             font-size: 14px;
             color: #f8f9fa;
         }
-
-        #js-code {
-            display: block; /* Initially show JavaScript code */
-        }
-
-        #html-css-code {
-            display: none; /* Initially hide HTML and CSS code */
-        }
     </style>
 </head>
 <body>
@@ -44,15 +36,12 @@
         <button class="btn btn-success" id="new">New</button>
     </div>
 
-    <div id="html-css-code" class="mt-4"></div>
-    <div id="js-code" class="mt-4"></div>
+    <div id="content" class="mt-4"></div>
 </div>
 
 <footer class="bg-dark text-light text-center py-3 mt-4">
     <div class="footer-info" id="footer-info"></div>
-    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" 
-
-rel="noopener">santhu</a></div>
+    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" rel="noopener">santhu</a></div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -74,16 +63,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var saveButton = document.getElementById("save");
     var newButton = document.getElementById("new");
-    var viewSourceButton = document.getElementById("viewSource");
     var footerInfo = document.getElementById("footer-info");
-    var htmlCssCodeDiv = document.getElementById("html-css-code");
-    var jsCodeDiv = document.getElementById("js-code");
+    var contentDiv = document.getElementById("content");
 
     saveButton.addEventListener("click", function () {
         var fileId = Math.random().toString(36).substring(7);
         var codeContent = editor.getValue();
         localStorage.setItem(fileId, codeContent);
-        var link = "https://tgbotspaste.netlify.app?file=" + fileId;
+        var link = window.location.href + "?file=" + fileId;
         document.getElementById("content").innerHTML = "Share this link: <a href='" + link + "' target='_blank'>" + link + "</a>";
         updateFooterInfo();
         saveButton.disabled = true; // Disable the save button after saving
@@ -94,10 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("content").innerHTML = "";
         saveButton.disabled = false; // Enable the save button when creating a new file
         updateFooterInfo();
-    });
-
-    viewSourceButton.addEventListener("click", function () {
-        toggleViewSource();
     });
 
     // Check if a shared link is present in the URL
@@ -117,6 +100,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initial update of footer info
     updateFooterInfo();
+
+    // Add listener to prevent viewing the page source
+    document.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && e.key === "u") {
+            e.preventDefault();
+        }
+    });
+
+    // Add listener to prevent right-click context menu
+    window.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+    });
 });
 
 function updateFooterInfo() {
@@ -132,19 +127,6 @@ function updateFooterInfo() {
 
     var infoText = `Words: ${wordCount} | Lines: ${lineCount} | Length: ${length} | Line Wrap: ${wrapInfo}`;
     footerInfo.textContent = infoText;
-}
-
-function toggleViewSource() {
-    var htmlCssCodeDiv = document.getElementById("html-css-code");
-    var jsCodeDiv = document.getElementById("js-code");
-
-    if (htmlCssCodeDiv.style.display === "none") {
-        htmlCssCodeDiv.style.display = "block";
-        jsCodeDiv.style.display = "none";
-    } else {
-        htmlCssCodeDiv.style.display = "none";
-        jsCodeDiv.style.display = "block";
-    }
 }
 </script>
 </body>

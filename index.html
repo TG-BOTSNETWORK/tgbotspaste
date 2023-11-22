@@ -8,7 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: rgba(255, 144, 163, 1);
+        }
+
+        .footer-info {
+            font-size: 14px;
+            color: #f8f9fa;
+        }
+
+        #js-code {
+            display: block; /* Initially show JavaScript code */
+        }
+
+        #html-css-code {
+            display: none; /* Initially hide HTML and CSS code */
         }
     </style>
 </head>
@@ -27,15 +40,19 @@
     </div>
 
     <div class="btn-group">
-        <button class="btn btn-primary" id="save" disabled>Save</button>
+        <button class="btn btn-primary" id="save">Save</button>
         <button class="btn btn-success" id="new">New</button>
     </div>
 
-    <div id="content" class="mt-4"></div>
+    <div id="html-css-code" class="mt-4"></div>
+    <div id="js-code" class="mt-4"></div>
 </div>
 
 <footer class="bg-dark text-light text-center py-3 mt-4">
-    Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" rel="noopener">santhu</a>
+    <div class="footer-info" id="footer-info"></div>
+    <div class="footer-info">Copyright &copy; 2023 - <i class="fas fa-cat"></i> <a href="https://github.com/Yumiko-Bots" target="_blank" 
+
+rel="noopener">santhu</a></div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -56,26 +73,79 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     var saveButton = document.getElementById("save");
-
-    document.getElementById("new").addEventListener("click", function () {
-        editor.setValue("");
-        document.getElementById("content").innerHTML = "";
-        saveButton.disabled = true;
-    });
-
-    editor.on("change", function () {
-        saveButton.disabled = editor.getValue().trim() === "";
-    });
+    var newButton = document.getElementById("new");
+    var viewSourceButton = document.getElementById("viewSource");
+    var footerInfo = document.getElementById("footer-info");
+    var htmlCssCodeDiv = document.getElementById("html-css-code");
+    var jsCodeDiv = document.getElementById("js-code");
 
     saveButton.addEventListener("click", function () {
         var fileId = Math.random().toString(36).substring(7);
         var codeContent = editor.getValue();
         localStorage.setItem(fileId, codeContent);
-        var link = window.location.href + fileId;
+        var link = "https://tgbotspaste.netlify.app?file=" + fileId;
         document.getElementById("content").innerHTML = "Share this link: <a href='" + link + "' target='_blank'>" + link + "</a>";
-        saveButton.disabled = true;
+        updateFooterInfo();
+        saveButton.disabled = true; // Disable the save button after saving
     });
+
+    newButton.addEventListener("click", function () {
+        editor.setValue("");
+        document.getElementById("content").innerHTML = "";
+        saveButton.disabled = false; // Enable the save button when creating a new file
+        updateFooterInfo();
+    });
+
+    viewSourceButton.addEventListener("click", function () {
+        toggleViewSource();
+    });
+
+    // Check if a shared link is present in the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var fileIdParam = urlParams.get("file");
+
+    if (fileIdParam) {
+        // Display the shared code in read-only mode
+        var sharedCode = localStorage.getItem(fileIdParam);
+        if (sharedCode) {
+            editor.setValue(sharedCode);
+            editor.setOption("readOnly", "nocursor");
+            saveButton.style.display = "none";
+            newButton.style.display = "none";
+        }
+    }
+
+    // Initial update of footer info
+    updateFooterInfo();
 });
+
+function updateFooterInfo() {
+    var content = editor.getValue();
+    var wordCount = content.split(/\s+/).filter(function (word) {
+        return word.length > 0;
+    }).length;
+    var lineCount = editor.lineCount();
+    var length = content.length;
+
+    var lineWrap = editor.getOption("lineWrapping");
+    var wrapInfo = lineWrap ? "Wrapped" : "Not Wrapped";
+
+    var infoText = `Words: ${wordCount} | Lines: ${lineCount} | Length: ${length} | Line Wrap: ${wrapInfo}`;
+    footerInfo.textContent = infoText;
+}
+
+function toggleViewSource() {
+    var htmlCssCodeDiv = document.getElementById("html-css-code");
+    var jsCodeDiv = document.getElementById("js-code");
+
+    if (htmlCssCodeDiv.style.display === "none") {
+        htmlCssCodeDiv.style.display = "block";
+        jsCodeDiv.style.display = "none";
+    } else {
+        htmlCssCodeDiv.style.display = "none";
+        jsCodeDiv.style.display = "block";
+    }
+}
 </script>
 </body>
 </html>
